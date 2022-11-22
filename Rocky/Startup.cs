@@ -1,6 +1,6 @@
+using EmailService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,9 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rocky.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Features;
+using UIServices = Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Rocky
 {
@@ -23,7 +22,8 @@ namespace Rocky
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Этот метод вызывается средой выполнения. Используйте этот метод
+        // для добавления сервисов в контейнер.
         public void ConfigureServices(IServiceCollection services)
         {
             // Сервис для создания контекста базы данных
@@ -42,6 +42,25 @@ namespace Rocky
                 // Конфигурация для создания таблиц авторизации
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Извлечение значения конфигурации из файла appsettings
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            // Регистрация EmailConfiguration как синглтон
+            // Singleton: объект сервиса создается при первом обращении к нему
+            services.AddSingleton(emailConfig);
+            // Регистрация сервиса отправки почты
+            services.AddScoped<EmailService.IEmailSender, EmailService.EmailSender>();
+            // Регистрация сервиса-утилиты для отправки почты 
+            // Scoped: для каждого запроса создается свой объект сервиса
+            services.AddScoped<UIServices.IEmailSender, Utility.EmailSender>();
+
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
+
             services.AddHttpContextAccessor();
 
             services.AddSession(Options =>
@@ -55,7 +74,7 @@ namespace Rocky
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // Этот метод вызывается средой выполнения. Используйте этот метод для настройки конвейера HTTP-запросов.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
