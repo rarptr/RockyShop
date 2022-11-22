@@ -1,0 +1,67 @@
+﻿@model Rocky.Models.Category
+
+<!-- Выполняется метод (POST) Create при отправке формы -->
+<form method="post" asp-action="Create">
+    <div class="border p-3">
+        <!-- Валидация ввода -->
+        <!-- ModelOnly  Выводить сообщения об ошибках только у полей ввода-->
+        <!-- All        Выводить сообщения об ошибках у полей ввода и над формой -->
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-info pl-3">Add Category</h2>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <!-- Название берется из имени модели-->
+                        <label asp-for="Name"></label>
+                    </div>
+                    <div class="col-8">
+                        <!-- Значения автоматически подставляются,
+                        т.к. свойство модели указано в тег-хелпере -->
+                        <input asp-for="Name" class="form-control" />
+                        <!-- Место для отображения сообщений об ошибках-->
+                        <span asp-validation-for="Name" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="DisplayOrder"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="DisplayOrder" class="form-control" />
+                        <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+
+                        <div class="col">
+                            <input type="submit" class="btn btn-info w-100" value="Create" />
+                        </div>
+                        <div class="col">
+                            <!-- Имя контроллера не указывается, т.к. перемещение в рамках одного контроллера-->
+                            <!-- asp-controller="Category" -->
+                            <a asp-action="Index" class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i>Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @* Keep this empty *@
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<!-- Скрипты для валидации на стороне клиента -->
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    }

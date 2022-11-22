@@ -1,0 +1,62 @@
+﻿@model Rocky.Models.Category
+
+<!-- Явное указание метода asp-action="DeletePost", т.к. его название
+отличается от имени представления-->
+<form method="post" asp-action="DeletePost">
+    <!-- Скрытое поле формы с идентификатором для передачи Id в контроллер -->
+    <input asp-for="Id" hidden />
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">Delete Category</h2>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <!-- Название берется из имени модели-->
+                        <label asp-for="Name"></label>
+                    </div>
+                    <div class="col-8">
+                        <!-- Значения автоматически подставляются,
+                        т.к. свойство модели указано в тег-хелпере -->
+                        <input asp-for="Name" disabled class="form-control" />
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="DisplayOrder"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="DisplayOrder" disabled class="form-control" />
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+
+                        <div class="col">
+                            <input type="submit" class="btn btn-danger w-100" value="Delete" />
+                        </div>
+                        <div class="col">
+                            <!-- Имя контроллера не указывается, т.к. перемещение в рамках одного контроллера-->
+                            <!-- asp-controller="Category" -->
+                            <a asp-action="Index" class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i>Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @* Keep this empty *@
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<!-- Скрипты для валидации на стороне клиента -->
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    }
