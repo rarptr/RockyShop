@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace Rocky.Utility
+namespace Rocky_Utility
 {
     public static class SessionExtensions
     {
@@ -14,7 +14,5 @@ namespace Rocky.Utility
             var value = session.GetString(key);
             return value == null ? default : JsonSerializer.Deserialize<T>(value);
         }
-
-
     }
 }

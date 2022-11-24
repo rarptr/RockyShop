@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Rocky.Models;
+using Rocky_Utility;
 
 namespace Rocky.Areas.Identity.Pages.Account
 {
@@ -112,7 +113,7 @@ namespace Rocky.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, WC.CustomerRole);
                     }
-                    
+
 
                     _logger.LogInformation("User created a new account with password.");
 
@@ -133,7 +134,16 @@ namespace Rocky.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        // Если пользователю присвоена роль админа, то не
+                        // нужно регистрировать нового пользователя
+                        if (!User.IsInRole(WC.AdminRole))
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index");
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }

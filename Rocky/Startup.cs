@@ -45,15 +45,15 @@ namespace Rocky
             // Извлечение значения конфигурации из файла appsettings
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
-                .Get<EmailConfiguration>();
+                .Get<Configuration>();
             // Регистрация EmailConfiguration как синглтон
             // Singleton: объект сервиса создается при первом обращении к нему
             services.AddSingleton(emailConfig);
             // Регистрация сервиса отправки почты
-            services.AddScoped<EmailService.IEmailSender, EmailService.EmailSender>();
+            services.AddScoped<ISender, Sender>();
             // Регистрация сервиса-утилиты для отправки почты 
             // Scoped: для каждого запроса создается свой объект сервиса
-            services.AddScoped<UIServices.IEmailSender, Utility.EmailSender>();
+            services.AddScoped<UIServices.IEmailSender, Rocky_Utility.EmailSender>();
 
             services.Configure<FormOptions>(o => {
                 o.ValueLengthLimit = int.MaxValue;

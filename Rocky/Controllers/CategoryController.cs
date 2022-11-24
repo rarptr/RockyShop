@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Rocky.Data;
 using Rocky.Models;
+using Rocky_Utility;
 using System.Collections.Generic;
 
 namespace Rocky.Controllers
 {
+    // Для получения доступа к контроллеру нужна роль админа
+    [Authorize(Roles = WC.AdminRole)]
     public class CategoryController : Controller
     {
         // Контекст базы данных

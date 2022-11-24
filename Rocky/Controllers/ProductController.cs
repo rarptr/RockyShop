@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Rocky.Data;
 using Rocky.Models;
 using Rocky.Models.ViewModels;
+using Rocky_Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +14,8 @@ using System.Linq;
 
 namespace Rocky.Controllers
 {
+    // Для получения доступа к контроллеру нужна роль админа
+    [Authorize(Roles = WC.AdminRole)]
     public class ProductController : Controller
     {
         // Контекст базы данных

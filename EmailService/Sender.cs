@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace EmailService
 {
-    public class EmailSender : IEmailSender
+    public class Sender : ISender
     {
-        private readonly EmailConfiguration _emailConfig;
+        private readonly Configuration _emailConfig;
 
-        public EmailSender(EmailConfiguration emailConfig)
+        public Sender(Configuration emailConfig)
         {
             _emailConfig = emailConfig;
         }

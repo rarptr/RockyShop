@@ -1,15 +1,13 @@
-﻿using EmailService;
-using IdentityUIServices = Microsoft.AspNetCore.Identity.UI.Services;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using EmailService;
 
-namespace Rocky.Utility
+namespace Rocky_Utility
 {
-    public class EmailSender : IdentityUIServices.IEmailSender
+    public class EmailSender : Microsoft.AspNetCore.Identity.UI.Services.IEmailSender
     {
-        
-        private readonly EmailService.IEmailSender _emailSender;
+        private readonly ISender _emailSender;
 
-        public EmailSender(EmailService.IEmailSender emailSender)
+        public EmailSender(ISender emailSender)
         {
             _emailSender = emailSender;
         }
@@ -25,7 +23,5 @@ namespace Rocky.Utility
             var message = new Message(new string[] { "davidtri2013@yandex.ru" }, subject, body, null);
             await _emailSender.SendEmailAsync(message);
         }
-
     }
-
 }

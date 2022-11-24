@@ -6,7 +6,7 @@ namespace EmailService
 {
     // Содержит свойства, необходимые для настройки отправки сообщений электронной почты
     // из приложения. Для заполнения свойств используется файл appsettings.json
-    public class EmailConfiguration
+    public class Configuration
     {
         public string From { get; set; }
         public string SmtpServer { get; set; }
