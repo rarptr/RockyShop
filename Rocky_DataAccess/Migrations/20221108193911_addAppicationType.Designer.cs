@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Rocky.Data;
+using Rocky_DataAccess.Data;
 
 namespace Rocky.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221108140928_addCategoryToDatabase")]
-    partial class addCategoryToDatabase
+    [Migration("20221108193911_addAppicationType")]
+    partial class addAppicationType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
