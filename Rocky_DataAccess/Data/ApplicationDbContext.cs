@@ -16,6 +16,9 @@ namespace Rocky_DataAccess.Data
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
+        public DbSet<InquiryHeader> InquiryHeader { get; set; }
+        public DbSet<InquiryDetail> InquiryDetail { get; set; }
+
         // Добавление миграции:
         // 1. Установить Microsoft.EntityFrameworkCore.Tools
         // 2. Создание миграции: Средства -> Диспетчер пакетов NuGet ->

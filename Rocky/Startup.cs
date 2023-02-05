@@ -10,6 +10,8 @@ using Rocky_DataAccess.Data;
 using System;
 using Microsoft.AspNetCore.Http.Features;
 using UIServices = Microsoft.AspNetCore.Identity.UI.Services;
+using Rocky_DataAccess.Repository.IRepository;
+using Rocky_DataAccess.Repository;
 
 namespace Rocky
 {
@@ -22,37 +24,37 @@ namespace Rocky
 
         public IConfiguration Configuration { get; }
 
-        // ���� ����� ���������� ������ ����������. ����������� ���� �����
-        // ��� ���������� �������� � ���������.
+        // Этот метод вызывается средой выполнения. Используйте этот метод
+        // для добавления сервисов в контейнер.
         public void ConfigureServices(IServiceCollection services)
         {
-            // ������ ��� �������� ��������� ���� ������
+            // Сервис для создания контекста базы данных
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                // ��������� ��������� ����������� ��� �������� � ApplicationDbContext
-                // ��������� ��������� ��� ����������� � �� MSSQL
+                // Настройка параметра подключения для передачи в ApplicationDbContext
+                // Настройка контекста для подключения к бд MSSQL
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             
             services.AddIdentity<IdentityUser, IdentityRole>()
-                // ��������� ������ ��� �������������� ������
+                // Получение токена для восстановления пароля
                 .AddDefaultTokenProviders()
-                // �������� Razor ��� �������������
+                // Страницы Razor для идентификации
                 .AddDefaultUI()
-                // ������������ ��� �������� ������ �����������
+                // Конфигурация для создания таблиц авторизации
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // ���������� �������� ������������ �� ����� appsettings
+            // Извлечение значения конфигурации из файла appsettings
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
                 .Get<Configuration>();
-            // ����������� EmailConfiguration ��� ��������
-            // Singleton: ������ ������� ��������� ��� ������ ��������� � ����
+            // Регистрация EmailConfiguration как синглтон
+            // Singleton: объект сервиса создается при первом обращении к нему
             services.AddSingleton(emailConfig);
-            // ����������� ������� �������� �����
+            // Регистрация сервиса отправки почты
             services.AddScoped<ISender, Sender>();
-            // ����������� �������-������� ��� �������� ����� 
-            // Scoped: ��� ������� ������� ��������� ���� ������ �������
+            // Регистрация сервиса-утилиты для отправки почты 
+            // Scoped: для каждого запроса создается свой объект сервиса
             services.AddScoped<UIServices.IEmailSender, Rocky_Utility.EmailSender>();
 
             services.Configure<FormOptions>(o => {
@@ -70,11 +72,18 @@ namespace Rocky
                 Options.Cookie.IsEssential = true;
             });
 
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IApplicationTypeRepository, ApplicationTypeRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IInquiryHeaderRepository, InquiryHeaderRepository>();
+            services.AddScoped<IInquiryDetailRepository, InquiryDetailRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+
             services.AddControllersWithViews();
 
         }
 
-        // ���� ����� ���������� ������ ����������. ����������� ���� ����� ��� ��������� ��������� HTTP-��������.
+        // Этот метод вызывается средой выполнения. Используйте этот метод для настройки конвейера HTTP-запросов.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
